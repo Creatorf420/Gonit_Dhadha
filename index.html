@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>গণিতের ধাঁধা খেলা!</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background-color: #f0f8ff;
+      margin: 0; /* Remove default body margin */
+    }
+    h1 {
+      color: #336699;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.6;
+      padding: 0 20px; /* Add padding for smaller screens */
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 80%; /* Make input width responsive */
+      max-width: 300px; /* Limit maximum width */
+      margin: 10px 0; /* Add vertical margin */
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 0 20px; /* Add padding for smaller screens */
+    }
+
+    /* Media query for screens smaller than 600px (like phones) */
+    @media (max-width: 600px) {
+      body {
+        padding-top: 30px; /* Reduce top padding on small screens */
+      }
+      h1 {
+        font-size: 24px; /* Smaller heading on small screens */
+      }
+      p, #message {
+        font-size: 14px; /* Smaller font on small screens */
+      }
+      button{
+        width: 80%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>গণিত ধাঁধা!</h1>
+  <p>আমি ০ থেকে ১০০০-এর মধ্যে একটি সংখ্যা ভাবছি। তুমি কি গণিতের মাধ্যমে সেটি অনুমান করতে পারবে?</p>
+  <p>উদাহরণস্বরূপ, সংখ্যাটি ৫০ হলে, তুমি "২৫ * ২" অথবা "১০০ / ২" অথবা "৪০ + ১০" অথবা "৬০ - ১০" লিখতে পারো।</p>
+
+  <input type="text" id="guessInput" placeholder="তোমার গণিতের সমীকরণটি লেখো">
+  <button onclick="handleGuess()">উত্তর দাও!</button>
+  <p id="message"></p>
+
+  <script>
+    // ... (Your JavaScript code remains the same) ...
+    function mathGuessGame() {
+      const secretNumber = Math.floor(Math.random() * 1001);
+      let attempts = 0;
+
+      function checkGuess(guess) {
+        attempts++;
+        try {
+          const result = eval(guess);
+          if (result === secretNumber) {
+            return {
+              message: `তুমি জিতেছো! সংখ্যাটি ছিল ${secretNumber}. তুমি ${attempts} বার চেষ্টা করেছো!`,
+              correct: true,
+            };
+          } else if (result < secretNumber) {
+            return { message: "আরও বড়ো সংখ্যা চেষ্টা করো!", correct: false };
+          } else {
+            return { message: "আরও ছোটো সংখ্যা চেষ্টা করো!", correct: false };
+          }
+        } catch (error) {
+          return {
+            message: "ভুল ইনপুট। দয়া করে সংখ্যা এবং +, -, *, / ব্যবহার করো।",
+            correct: false,
+          };
+        }
+      }
+
+      return {
+        checkGuess: checkGuess,
+        secretNumber: secretNumber,
+      };
+    }
+
+    const game = mathGuessGame();
+
+    function handleGuess() {
+      const guessInput = document.getElementById("guessInput");
+      const guess = guessInput.value;
+      const result = game.checkGuess(guess);
+
+      document.getElementById("message").textContent = result.message;
+      if (result.correct) {
+        document.getElementById("message").style.color = "green";
+        guessInput.disabled = true;
+      } else if (result.message.includes("ভুল")) {
+        document.getElementById("message").style.color = "orange";
+      } else {
+        document.getElementById("message").style.color = "red";
+      }
+      guessInput.value = "";
+      guessInput.focus();
+    }
+  </script>
+</body>
+</html>
